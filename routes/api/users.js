@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const {check, validationResult} = require ('express-validator');
 const gravtar = require('gravatar');
 const bcrypt = require('bcryptjs');
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const User = require ('../../model/User');
+const {check, validationResult} = require ('express-validator');
 router.post('/', [
     check('name', 'Name is required').not().isEmpty(),
     check('email', 'Please include a valid email address').isEmail(),
@@ -15,6 +17,7 @@ router.post('/', [
     } 
 
     const {name, email, password} = req.body;
+    //Check for existing user
     try {
         let user = await User.findOne({email});
 
@@ -26,21 +29,38 @@ router.post('/', [
             r:'pg',
             d:'mm'
         })
-
+       
+        //register new user
         user = new User({
             name,
             email,
             avatar,
             password
         });
-
+        //Encrypt password
         const salt = await bcrypt.genSalt(10);
 
         user.password = await bcrypt.hash(password, salt);
-
+         //Save user
         await user.save();
-        
-       res.send('User registred');
+
+        //implement JWT
+        const payload = {
+            user:{
+             id: user.id 
+            }
+        }
+
+        jwt.sign(
+            payload,
+            config.get('jwtSecret'),
+            {expiresIn:36000},
+            (err, token) => {
+              if (err) throw err;
+              res.json({token});
+            }
+             );
+       
     }
      catch (err) {
       console.log(err.message);
