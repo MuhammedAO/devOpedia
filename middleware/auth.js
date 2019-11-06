@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
+//Protected route func
 module.exports = (req,res,next) => {
     //get token from header
     const token = req.header('x-auth-token');

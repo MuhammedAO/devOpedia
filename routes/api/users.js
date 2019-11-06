@@ -67,12 +67,6 @@ router.post('/', [
       res.status(500).send('Internal server error')
     }
     
-
-    //Get users' gravatar
-
-    //Encrypt Password
-
-    //Get JWT
 })
 
 module.exports = router;
