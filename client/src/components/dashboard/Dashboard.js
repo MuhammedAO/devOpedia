@@ -4,13 +4,14 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import { getCurrentProfile } from '../../actions/profile'
 import Spinner from '../layout/Spinner'
+
 const Dashboard = ({
     getCurrentProfile,
      auth:{user}, 
      profile:{profile, loading}}) => {
     useEffect(() => {
         getCurrentProfile();
-    }, []);
+    }, [getCurrentProfile]);
 
 
     return loading && profile === null ? <Spinner/> : <Fragment>
