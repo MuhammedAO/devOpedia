@@ -11,7 +11,7 @@ app.use(express.json({extended: false}));
 
 
 
-app.get('/',(req, res) => res.send('Welcome'));
+
 
 //Define routes
 app.use('/api/users', require('./routes/api/users'));
