@@ -2,7 +2,8 @@ import {
     GET_POSTS, 
     GET_POST,
     POST_ERROR,
-    UPDATE_LIKES
+    UPDATE_LIKES,
+    DELETE_POST
 } from '../actions/types'
 
 
@@ -35,6 +36,12 @@ export const post = (state= initState, action) => {
                 posts: state.posts.map(post => post._id === payload.id ? {...post, likes: payload.likes} : post),
                 loading: false
             }
+        case DELETE_POST:
+            return{
+                ...state,
+                posts: state.post.filter(post => post._id !== payload.id),
+                loading:false
+            }    
     
         default:
           return state
